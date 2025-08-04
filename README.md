@@ -24,7 +24,7 @@ The qecc-aware-qml-trainer is a quantum-classical framework that seamlessly inte
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/qecc-aware-qml-trainer.git
+git clone https://github.com/danieleschmidt/qecc-aware-qml-trainer.git
 cd qecc-aware-qml-trainer
 
 # Create conda environment
@@ -399,7 +399,7 @@ Priority areas:
 ```bibtex
 @article{qecc_aware_qml_2025,
   title={QECC-Aware Training for Noise-Resilient Quantum Machine Learning},
-  author={Your Name et al.},
+  author={Daniel Schmidt},
   journal={Physical Review Applied},
   year={2025}
 }

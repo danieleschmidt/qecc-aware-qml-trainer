@@ -1,0 +1,182 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: qecc-qml-api
+  namespace: qecc-qml
+  labels:
+    app: qecc-qml
+    component: api
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8000"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  - port: 443  
+    targetPort: 8000
+    protocol: TCP
+    name: https
+  selector:
+    app: qecc-qml
+    component: api
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 300
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qecc-qml-redis
+  namespace: qecc-qml
+  labels:
+    app: qecc-qml
+    component: redis
+spec:
+  type: ClusterIP
+  ports:
+  - port: 6379
+    targetPort: 6379
+    protocol: TCP
+    name: redis
+  selector:
+    app: qecc-qml
+    component: redis
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qecc-qml-postgres
+  namespace: qecc-qml
+  labels:
+    app: qecc-qml
+    component: postgres
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: postgres
+  selector:
+    app: qecc-qml
+    component: postgres
+
+---
+# Headless service for StatefulSet
+apiVersion: v1
+kind: Service
+metadata:
+  name: qecc-qml-redis-headless
+  namespace: qecc-qml
+  labels:
+    app: qecc-qml
+    component: redis
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - port: 6379
+    targetPort: 6379
+    protocol: TCP
+    name: redis
+  selector:
+    app: qecc-qml
+    component: redis
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qecc-qml-postgres-headless
+  namespace: qecc-qml
+  labels:
+    app: qecc-qml
+    component: postgres
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: postgres
+  selector:
+    app: qecc-qml
+    component: postgres
+
+---
+# Service for monitoring
+apiVersion: v1
+kind: Service
+metadata:
+  name: qecc-qml-monitoring
+  namespace: qecc-qml
+  labels:
+    app: qecc-qml
+    component: monitoring
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8001"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8001
+    targetPort: 8001
+    protocol: TCP
+    name: monitoring
+  selector:
+    app: qecc-qml
+    component: api
+
+---
+# Service for Celery Flower monitoring
+apiVersion: v1
+kind: Service
+metadata:
+  name: qecc-qml-flower
+  namespace: qecc-qml
+  labels:
+    app: qecc-qml
+    component: flower
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5555
+    targetPort: 5555
+    protocol: TCP
+    name: flower
+  selector:
+    app: qecc-qml
+    component: flower
+
+---
+# Internal service for worker communication
+apiVersion: v1
+kind: Service
+metadata:
+  name: qecc-qml-worker-internal
+  namespace: qecc-qml
+  labels:
+    app: qecc-qml
+    component: worker
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - port: 8002
+    targetPort: 8002
+    protocol: TCP
+    name: worker-metrics
+  selector:
+    app: qecc-qml
+    component: worker

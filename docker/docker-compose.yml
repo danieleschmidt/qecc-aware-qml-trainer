@@ -1,0 +1,300 @@
+version: '3.8'
+
+services:
+  # Main QECC-QML application
+  qecc-qml:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: production
+    container_name: qecc-qml-app
+    restart: unless-stopped
+    environment:
+      - QECC_QML_LOG_LEVEL=INFO
+      - QECC_QML_ENABLE_TELEMETRY=true
+      - QECC_QML_MAX_WORKERS=4
+    volumes:
+      - qecc_data:/app/data
+      - qecc_logs:/app/logs
+      - qecc_models:/app/models
+      - ./config:/app/config:ro
+    networks:
+      - qecc-network
+    healthcheck:
+      test: ["CMD", "qecc-qml", "health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Development environment
+  qecc-qml-dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: development
+    container_name: qecc-qml-dev
+    ports:
+      - "8888:8888"  # Jupyter
+      - "8050:8050"  # Dash monitoring
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - QECC_QML_DEBUG=true
+    volumes:
+      - ../:/app
+      - qecc_dev_data:/app/data
+    networks:
+      - qecc-network
+    profiles:
+      - dev
+
+  # Redis for caching and job queue
+  redis:
+    image: redis:7-alpine
+    container_name: qecc-qml-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - qecc-network
+    command: redis-server --appendonly yes
+
+  # PostgreSQL for metadata storage
+  postgres:
+    image: postgres:15-alpine
+    container_name: qecc-qml-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: qecc_qml
+      POSTGRES_USER: qecc_user
+      POSTGRES_PASSWORD: qecc_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - qecc-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U qecc_user -d qecc_qml"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: qecc-qml-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - qecc-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+
+  # Grafana for monitoring dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: qecc-qml-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin123
+      GF_USERS_ALLOW_SIGN_UP: false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+      - ./monitoring/grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
+      - ./monitoring/dashboards:/var/lib/grafana/dashboards:ro
+    networks:
+      - qecc-network
+    depends_on:
+      - prometheus
+
+  # InfluxDB for time-series data
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: qecc-qml-influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: adminpassword
+      DOCKER_INFLUXDB_INIT_ORG: qecc-org
+      DOCKER_INFLUXDB_INIT_BUCKET: quantum-metrics
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    networks:
+      - qecc-network
+
+  # Elasticsearch for log aggregation
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.0
+    container_name: qecc-qml-elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - qecc-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Kibana for log visualization
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.0
+    container_name: qecc-qml-kibana
+    restart: unless-stopped
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    networks:
+      - qecc-network
+    depends_on:
+      - elasticsearch
+
+  # Filebeat for log shipping
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.10.0
+    container_name: qecc-qml-filebeat
+    restart: unless-stopped
+    user: root
+    volumes:
+      - ./monitoring/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - qecc_logs:/app/logs:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - qecc-network
+    depends_on:
+      - elasticsearch
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: qecc-qml-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    networks:
+      - qecc-network
+    depends_on:
+      - qecc-qml
+      - grafana
+      - kibana
+
+  # Job scheduler (optional)
+  celery-worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: production
+    container_name: qecc-qml-worker
+    restart: unless-stopped
+    command: celery -A qecc_qml.tasks worker --loglevel=info
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    volumes:
+      - qecc_data:/app/data
+      - qecc_models:/app/models
+    networks:
+      - qecc-network
+    depends_on:
+      - redis
+      - postgres
+    profiles:
+      - worker
+
+  # Celery beat scheduler
+  celery-beat:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: production
+    container_name: qecc-qml-scheduler
+    restart: unless-stopped
+    command: celery -A qecc_qml.tasks beat --loglevel=info
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    volumes:
+      - qecc_data:/app/data
+    networks:
+      - qecc-network
+    depends_on:
+      - redis
+    profiles:
+      - scheduler
+
+  # Flower for Celery monitoring
+  flower:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: production
+    container_name: qecc-qml-flower
+    restart: unless-stopped
+    ports:
+      - "5555:5555"
+    command: celery -A qecc_qml.tasks flower
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    networks:
+      - qecc-network
+    depends_on:
+      - redis
+    profiles:
+      - monitoring
+
+volumes:
+  qecc_data:
+    driver: local
+  qecc_dev_data:
+    driver: local
+  qecc_logs:
+    driver: local
+  qecc_models:
+    driver: local
+  redis_data:
+    driver: local
+  postgres_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  influxdb_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+
+networks:
+  qecc-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

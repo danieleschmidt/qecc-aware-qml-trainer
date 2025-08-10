@@ -1,0 +1,338 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qecc-qml-deployment
+  namespace: qecc-qml
+  labels:
+    app: qecc-qml
+    version: v1.0.0
+    component: api-server
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: qecc-qml
+  template:
+    metadata:
+      labels:
+        app: qecc-qml
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: qecc-qml-service-account
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: qecc-qml
+        image: qecc-qml:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: PROMETHEUS_ENABLED
+          value: "true"
+        - name: HEALTH_CHECK_ENABLED
+          value: "true"
+        envFrom:
+        - configMapRef:
+            name: qecc-qml-config
+        - secretRef:
+            name: qecc-qml-secrets
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 2
+            memory: 4Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        volumeMounts:
+        - name: data-volume
+          mountPath: /app/data
+        - name: logs-volume
+          mountPath: /app/logs
+        - name: models-volume
+          mountPath: /app/models
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: qecc-qml-data-pvc
+      - name: logs-volume
+        emptyDir: {}
+      - name: models-volume
+        persistentVolumeClaim:
+          claimName: qecc-qml-models-pvc
+      nodeSelector:
+        workload: compute-intensive
+      tolerations:
+      - key: "compute-intensive"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - qecc-qml
+              topologyKey: kubernetes.io/hostname
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qecc-qml-service
+  namespace: qecc-qml
+  labels:
+    app: qecc-qml
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  selector:
+    app: qecc-qml
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: qecc-qml-hpa
+  namespace: qecc-qml
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: qecc-qml-deployment
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Pods
+    pods:
+      metric:
+        name: quantum_circuit_execution_rate
+      target:
+        type: AverageValue
+        averageValue: "10"
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qecc-qml-config
+  namespace: qecc-qml
+data:
+  LOG_LEVEL: "INFO"
+  PROMETHEUS_PORT: "8000"
+  HEALTH_CHECK_INTERVAL: "30"
+  MAX_CIRCUIT_QUBITS: "100"
+  MAX_CIRCUIT_DEPTH: "1000"
+  OPTIMIZATION_LEVEL: "2"
+  ENABLE_MONITORING: "true"
+  ENABLE_AUTO_SCALING: "true"
+  CACHE_SIZE: "1000"
+  WORKER_THREADS: "4"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: qecc-qml-secrets
+  namespace: qecc-qml
+type: Opaque
+stringData:
+  DATABASE_URL: "postgresql://user:password@postgres:5432/qecc_qml"
+  REDIS_URL: "redis://redis:6379/0"
+  API_SECRET_KEY: "your-secret-key-here"
+  QUANTUM_BACKEND_TOKEN: "your-quantum-backend-token"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qecc-qml-data-pvc
+  namespace: qecc-qml
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 100Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qecc-qml-models-pvc
+  namespace: qecc-qml
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 50Gi
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: qecc-qml-service-account
+  namespace: qecc-qml
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: qecc-qml
+  name: qecc-qml-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: qecc-qml-rolebinding
+  namespace: qecc-qml
+subjects:
+- kind: ServiceAccount
+  name: qecc-qml-service-account
+  namespace: qecc-qml
+roleRef:
+  kind: Role
+  name: qecc-qml-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: qecc-qml-pdb
+  namespace: qecc-qml
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: qecc-qml
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: qecc-qml-network-policy
+  namespace: qecc-qml
+spec:
+  podSelector:
+    matchLabels:
+      app: qecc-qml
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8000
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: database
+    ports:
+    - protocol: TCP
+      port: 5432
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: cache
+    ports:
+    - protocol: TCP
+      port: 6379

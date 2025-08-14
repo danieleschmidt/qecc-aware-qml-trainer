@@ -4,7 +4,26 @@ QECC-aware training for quantum neural networks.
 
 from typing import Tuple, Optional, Dict, Any, Callable, List
 import numpy as np
-from tqdm import tqdm
+try:
+    from tqdm import tqdm
+except ImportError:
+    # Fallback for environments without tqdm
+    class tqdm:
+        def __init__(self, iterable=None, **kwargs):
+            self.iterable = iterable or []
+            self.kwargs = kwargs
+        def __iter__(self):
+            return iter(self.iterable)
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+        def set_description(self, desc):
+            print(f"Progress: {desc}")
+        def update(self, n=1):
+            pass
+        def close(self):
+            pass
 import time
 from qiskit_aer import AerSimulator
 

@@ -1,0 +1,57 @@
+{
+  "epoch": 0,
+  "timestamp": "2025-08-14T14:00:25.143932",
+  "parameters": [
+    10.722138329543723,
+    -0.0728496389052681,
+    10.780909610826953,
+    0.03518592049982161,
+    10.90853290647212,
+    0.08844614609018779,
+    10.85422396577512,
+    -0.23205000593198957,
+    10.781635025238199,
+    -0.09927984886124508,
+    10.78090617773795,
+    -0.056331261704015534
+  ],
+  "history": {
+    "loss": [
+      15.830455755411814
+    ],
+    "accuracy": [
+      0.5416666666666666
+    ],
+    "fidelity": [
+      0.5
+    ],
+    "epoch_time": [
+      0.019256114959716797
+    ],
+    "validation_metrics": [
+      {
+        "epoch": 0,
+        "val_loss": 6.907915198468176,
+        "val_accuracy": 0.8,
+        "batch_size": 16,
+        "cache_hit_rate": 0
+      }
+    ],
+    "error_events": [],
+    "performance_metrics": {},
+    "checkpoints": []
+  },
+  "performance_monitor": {
+    "peak_memory_usage": 0,
+    "total_computation_time": 0,
+    "successful_epochs": 0,
+    "failed_epochs": 0,
+    "recovery_events": 0
+  },
+  "learning_rate": 0.05,
+  "qnn_config": {
+    "num_qubits": 2,
+    "num_layers": 2,
+    "entanglement": "circular"
+  }
+}

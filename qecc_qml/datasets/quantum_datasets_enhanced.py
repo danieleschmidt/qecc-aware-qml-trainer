@@ -30,7 +30,10 @@ except ImportError:
     warnings.warn("PyTorch not available. Some datasets will be limited.")
 
 try:
+    try:
     from qiskit.quantum_info import random_statevector, Statevector
+except ImportError:
+    from qecc_qml.core.fallback_imports import random_statevector, Statevector
     from qiskit.circuit.library import ZZFeatureMap, PauliFeatureMap
     QISKIT_AVAILABLE = True
 except ImportError:

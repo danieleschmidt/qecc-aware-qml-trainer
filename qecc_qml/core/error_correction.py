@@ -5,7 +5,7 @@ Base error correction scheme interface and implementations.
 from abc import ABC, abstractmethod
 from typing import List, Dict, Optional, Tuple
 import numpy as np
-from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
+from .fallback_imports import QuantumCircuit, QuantumRegister, ClassicalRegister
 
 
 class ErrorCorrectionScheme(ABC):

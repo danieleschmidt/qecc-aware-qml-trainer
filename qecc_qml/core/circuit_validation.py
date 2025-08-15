@@ -5,8 +5,14 @@ Robust circuit validation and security measures.
 from typing import List, Dict, Any, Optional, Tuple
 import warnings
 import numpy as np
-from qiskit import QuantumCircuit
-from qiskit.quantum_info import Operator, process_fidelity
+try:
+    from qiskit import QuantumCircuit
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit
+try:
+    from qiskit.quantum_info import Operator, process_fidelity
+except ImportError:
+    from qecc_qml.core.fallback_imports import Operator, process_fidelity
 
 from ..utils.logging_config import get_logger
 

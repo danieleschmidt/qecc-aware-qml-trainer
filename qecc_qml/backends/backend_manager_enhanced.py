@@ -11,7 +11,10 @@ from typing import Optional, Dict, Any, List, Union
 import warnings
 import time
 from dataclasses import dataclass
-from qiskit_aer import AerSimulator
+try:
+    from qiskit_aer import AerSimulator
+except ImportError:
+    from qecc_qml.core.fallback_imports import AerSimulator
 from qiskit.providers.fake_provider import FakeLagos, FakeBoeblingen, FakeMontreal
 import numpy as np
 

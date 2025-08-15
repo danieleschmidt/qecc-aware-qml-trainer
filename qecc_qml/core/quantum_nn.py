@@ -4,10 +4,12 @@ Core quantum neural network implementation with QECC awareness.
 
 from typing import Optional, List, Union, Dict, Any
 import numpy as np
-from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
-from qiskit.circuit import Parameter, ParameterVector
-from qiskit.quantum_info import SparsePauliOp
-from qiskit_aer import AerSimulator
+
+# Import with fallback support
+from .fallback_imports import (
+    QuantumCircuit, QuantumRegister, ClassicalRegister,
+    Parameter, ParameterVector, SparsePauliOp, AerSimulator
+)
 
 from .error_correction import ErrorCorrectionScheme
 from .noise_models import NoiseModel

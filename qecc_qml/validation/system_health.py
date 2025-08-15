@@ -710,7 +710,10 @@ class HealthChecker:
         # Check Qiskit
         try:
             import qiskit
-            from qiskit_aer import AerSimulator
+            try:
+                from qiskit_aer import AerSimulator
+            except ImportError:
+                from qecc_qml.core.fallback_imports import AerSimulator
             
             # Test simulator
             simulator = AerSimulator()

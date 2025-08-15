@@ -6,8 +6,14 @@ Generation 2: Enhanced reliability and validation.
 from typing import Dict, List, Optional, Tuple, Any, Union
 import numpy as np
 import warnings
-from qiskit import QuantumCircuit
-from qiskit.quantum_info import Operator
+try:
+    from qiskit import QuantumCircuit
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit
+try:
+    from qiskit.quantum_info import Operator
+except ImportError:
+    from qecc_qml.core.fallback_imports import Operator
 import logging
 
 logger = logging.getLogger(__name__)

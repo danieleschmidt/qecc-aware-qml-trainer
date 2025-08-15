@@ -19,6 +19,32 @@ from ..utils.security import sanitize_input
 logger = get_logger(__name__)
 
 
+class QECCCache:
+    """
+    High-performance cache for QECC quantum computations.
+    """
+    
+    def __init__(self, max_size: int = 1000):
+        """Initialize QECC cache."""
+        self.lru_cache = LRUCache(max_size=max_size)
+    
+    def get(self, key: str) -> Optional[Any]:
+        """Get item from cache."""
+        return self.lru_cache.get(key)
+    
+    def set(self, key: str, value: Any) -> None:
+        """Set item in cache."""
+        self.lru_cache.put(key, value)
+    
+    def clear(self) -> None:
+        """Clear the cache."""
+        self.lru_cache.clear()
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """Get cache statistics."""
+        return self.lru_cache.stats()
+
+
 class LRUCache:
     """
     Thread-safe Least Recently Used cache with size and TTL limits.

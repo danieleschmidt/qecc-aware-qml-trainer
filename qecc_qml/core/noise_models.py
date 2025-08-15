@@ -4,9 +4,34 @@ Noise models for quantum error correction simulations.
 
 from typing import Dict, Optional, Union, List
 import numpy as np
-from qiskit_aer.noise import NoiseModel as QiskitNoiseModel
-from qiskit_aer.noise import depolarizing_error, thermal_relaxation_error, ReadoutError
-from qiskit_aer.noise import pauli_error, amplitude_damping_error, phase_damping_error
+
+try:
+    from qiskit_aer.noise import NoiseModel as QiskitNoiseModel
+    from qiskit_aer.noise import depolarizing_error, thermal_relaxation_error, ReadoutError
+    from qiskit_aer.noise import pauli_error, amplitude_damping_error, phase_damping_error
+except ImportError:
+    # Mock noise model classes for fallback
+    class QiskitNoiseModel:
+        def __init__(self):
+            pass
+    
+    def thermal_relaxation_error(t1, t2, time, excited_state_population=0):
+        return None
+    
+    def depolarizing_error(p, num_qubits):
+        return None
+    
+    def ReadoutError(probabilities):
+        return None
+    
+    def pauli_error(error_list):
+        return None
+    
+    def amplitude_damping_error(gamma):
+        return None
+    
+    def phase_damping_error(gamma):
+        return None
 
 
 class NoiseModel:

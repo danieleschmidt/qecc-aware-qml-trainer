@@ -663,7 +663,10 @@ class PerformanceOptimizer:
             # For Qiskit circuits
             if hasattr(circuit, 'decompose'):
                 # Basic gate decomposition and cancellation
-                from qiskit import transpile
+                try:
+    from qiskit import transpile
+except ImportError:
+    from qecc_qml.core.fallback_imports import transpile
                 from qiskit.transpiler import PassManager
                 from qiskit.transpiler.passes import Unroller, CXCancellation, CommutationAnalysis
                 
@@ -684,7 +687,10 @@ class PerformanceOptimizer:
         """Advanced circuit optimization."""
         try:
             if hasattr(circuit, 'decompose'):
-                from qiskit import transpile
+                try:
+    from qiskit import transpile
+except ImportError:
+    from qecc_qml.core.fallback_imports import transpile
                 from qiskit.transpiler import PassManager
                 from qiskit.transpiler.passes import (
                     Unroller, CXCancellation, CommutationAnalysis, CommutativeCancellation,
@@ -719,7 +725,10 @@ class PerformanceOptimizer:
         """Aggressive circuit optimization with all available passes."""
         try:
             if hasattr(circuit, 'decompose'):
-                from qiskit import transpile
+                try:
+    from qiskit import transpile
+except ImportError:
+    from qecc_qml.core.fallback_imports import transpile
                 from qiskit.transpiler import PassManager
                 from qiskit.transpiler.passes import (
                     Unroller, CXCancellation, CommutationAnalysis, CommutativeCancellation,

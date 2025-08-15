@@ -25,7 +25,10 @@ except ImportError:
         def close(self):
             pass
 import time
-from qiskit_aer import AerSimulator
+try:
+    from qiskit_aer import AerSimulator
+except ImportError:
+    from qecc_qml.core.fallback_imports import AerSimulator
 
 from ..core.quantum_nn import QECCAwareQNN
 from ..core.noise_models import NoiseModel

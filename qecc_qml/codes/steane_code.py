@@ -9,8 +9,14 @@ Author: Terragon Labs SDLC System
 
 from typing import List, Dict, Tuple, Optional
 import numpy as np
-from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
-from qiskit.quantum_info import Pauli
+try:
+    from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit, ClassicalRegister, QuantumRegister
+try:
+    from qiskit.quantum_info import Pauli
+except ImportError:
+    from qecc_qml.core.fallback_imports import Pauli
 
 from ..core.error_correction import ErrorCorrectionScheme
 

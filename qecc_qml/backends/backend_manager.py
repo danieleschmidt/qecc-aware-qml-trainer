@@ -3,7 +3,10 @@ Quantum backend management for automatic selection and optimization.
 """
 
 from typing import Optional, Dict, Any
-from qiskit_aer import AerSimulator
+try:
+    from qiskit_aer import AerSimulator
+except ImportError:
+    from qecc_qml.core.fallback_imports import AerSimulator
 from qiskit.providers.fake_provider import FakeLagos
 
 

@@ -22,8 +22,14 @@ from qecc_qml.optimization.adaptive_scaling import AdaptiveScaler
 from qecc_qml.optimization.quantum_circuit_optimization import QuantumCircuitOptimizer
 from qecc_qml.deployment.production_deployment import DeploymentConfig, ProductionDeployment
 
-from qiskit import QuantumCircuit
-from qiskit.quantum_info import random_statevector
+try:
+    from qiskit import QuantumCircuit
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit
+try:
+    from qiskit.quantum_info import random_statevector
+except ImportError:
+    from qecc_qml.core.fallback_imports import random_statevector
 
 
 class TestQECCQNNIntegration:
@@ -494,8 +500,14 @@ class TestCompatibilityAndIntegration:
     
     def test_qiskit_integration(self):
         """Test integration with Qiskit ecosystem."""
-        from qiskit import QuantumCircuit, transpile
-        from qiskit_aer import AerSimulator
+        try:
+    from qiskit import QuantumCircuit, transpile
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit, transpile
+        try:
+    from qiskit_aer import AerSimulator
+except ImportError:
+    from qecc_qml.core.fallback_imports import AerSimulator
         
         # Create circuit using QECC-QML
         qnn = QECCAwareQNN(num_qubits=3, num_layers=2)

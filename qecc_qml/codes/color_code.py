@@ -4,7 +4,10 @@ Color code implementation for quantum error correction.
 
 from typing import List, Dict, Tuple, Set
 import numpy as np
-from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
+try:
+    from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit, QuantumRegister, ClassicalRegister
 import networkx as nx
 
 from ..core.error_correction import ErrorCorrectionScheme

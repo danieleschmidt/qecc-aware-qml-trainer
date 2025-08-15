@@ -229,7 +229,7 @@ class BasicQECCTrainer:
         return self.history
     \
     def predict(self, X: np.ndarray) -> np.ndarray:\
-        \"""Predict using the trained model.\"""\
+        """Predict using the trained model."""
         if self.current_params is None:\
             raise ValueError(\"Model not trained yet. Call fit() first.\")\
         \

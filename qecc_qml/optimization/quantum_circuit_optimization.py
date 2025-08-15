@@ -8,9 +8,18 @@ from dataclasses import dataclass
 import time
 from collections import defaultdict
 
-from qiskit import QuantumCircuit, transpile
-from qiskit.circuit import Gate, Instruction
-from qiskit.quantum_info import Operator, process_fidelity
+try:
+    from qiskit import QuantumCircuit, transpile
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit, transpile
+try:
+    from qiskit.circuit import Gate, Instruction
+except ImportError:
+    from qecc_qml.core.fallback_imports import Gate, Instruction
+try:
+    from qiskit.quantum_info import Operator, process_fidelity
+except ImportError:
+    from qecc_qml.core.fallback_imports import Operator, process_fidelity
 from qiskit.converters import circuit_to_dag, dag_to_circuit
 from qiskit.dagcircuit import DAGCircuit
 

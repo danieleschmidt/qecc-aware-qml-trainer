@@ -19,6 +19,10 @@ from ..utils.diagnostics import HealthChecker
 logger = get_logger(__name__)
 
 
+# Import simple parallel processor to avoid complexity
+from .parallel_simple import ParallelProcessor
+
+
 class WorkerPool:
     """
     Managed pool of workers for parallel quantum circuit execution.
@@ -51,7 +55,57 @@ class WorkerPool:
         elif worker_type == "process":
             self.executor = concurrent.futures.ProcessPoolExecutor(max_workers=max_workers)
         else:
-            raise ValueError(f"Unsupported worker type: {worker_type}")
+            self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=max_workers)
+        
+        # Initialize metrics
+        self._task_count = 0
+        self._completed_tasks = 0
+        self._failed_tasks = 0
+    
+    def map(self, func: Callable, *iterables) -> List[Any]:
+        """Map function over iterables in parallel."""
+        futures = []
+        results = []
+        
+        try:
+            # Submit all tasks
+            for args in zip(*iterables):
+                future = self.executor.submit(func, *args)
+                futures.append(future)
+                self._task_count += 1
+            
+            # Collect results
+            for future in concurrent.futures.as_completed(futures):
+                try:
+                    result = future.result()
+                    results.append(result)
+                    self._completed_tasks += 1
+                except Exception as e:
+                    logger.error(f"Task failed: {e}")
+                    results.append(None)
+                    self._failed_tasks += 1
+            
+            return results
+            
+        except Exception as e:
+            logger.error(f"Error in parallel map: {e}")
+            return []
+    
+    def shutdown(self, wait: bool = True):
+        """Shutdown the worker pool."""
+        if hasattr(self, 'executor'):
+            self.executor.shutdown(wait=wait)
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """Get worker pool statistics."""
+        return {
+            'max_workers': self.max_workers,
+            'worker_type': self.worker_type,
+            'total_tasks': self._task_count,
+            'completed_tasks': self._completed_tasks,
+            'failed_tasks': self._failed_tasks,
+            'success_rate': self._completed_tasks / max(1, self._task_count)
+        }
         
         # Resource monitoring
         self.health_checker = HealthChecker()

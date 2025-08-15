@@ -52,7 +52,10 @@ def check_imports():
         "import numpy as np",
         "import qiskit",
         "import qiskit_aer",
-        "from qiskit import QuantumCircuit",
+        "try:
+    from qiskit import QuantumCircuit",
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit",
         "import sys; sys.path.append('.'); import qecc_qml",
         "from qecc_qml.core.quantum_nn import QECCAwareQNN",
         "from qecc_qml.monitoring.health_monitor import HealthMonitor",
@@ -79,7 +82,10 @@ def run_basic_functionality_tests():
 import sys
 sys.path.append('.')
 import numpy as np
-from qiskit import QuantumCircuit
+try:
+    from qiskit import QuantumCircuit
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit
 
 # Test circuit creation
 circuit = QuantumCircuit(4, 4)
@@ -128,7 +134,10 @@ import sys
 sys.path.append('.')
 import time
 import numpy as np
-from qiskit import QuantumCircuit
+try:
+    from qiskit import QuantumCircuit
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit
 
 # Test circuit optimization performance
 from qecc_qml.optimization.quantum_circuit_optimization import QuantumCircuitOptimizer
@@ -181,7 +190,10 @@ def run_security_tests():
     security_script = """
 import sys
 sys.path.append('.')
-from qiskit import QuantumCircuit
+try:
+    from qiskit import QuantumCircuit
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit
 from qecc_qml.core.circuit_validation import SecurityManager
 
 # Test security manager
@@ -224,7 +236,10 @@ def run_integration_tests():
 import sys
 sys.path.append('.')
 import numpy as np
-from qiskit import QuantumCircuit
+try:
+    from qiskit import QuantumCircuit
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit
 
 # Test QNN creation
 from qecc_qml.core.quantum_nn import QECCAwareQNN

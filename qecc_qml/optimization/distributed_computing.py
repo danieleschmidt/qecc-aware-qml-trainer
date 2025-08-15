@@ -791,8 +791,14 @@ class ParallelCircuitExecutor:
     ) -> Dict[str, Any]:
         """Execute Qiskit circuit."""
         try:
-            from qiskit_aer import AerSimulator
-            from qiskit import transpile
+            try:
+    from qiskit_aer import AerSimulator
+except ImportError:
+    from qecc_qml.core.fallback_imports import AerSimulator
+            try:
+    from qiskit import transpile
+except ImportError:
+    from qecc_qml.core.fallback_imports import transpile
             
             # Create backend
             if backend_name == "aer_simulator":

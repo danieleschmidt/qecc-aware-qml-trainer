@@ -8,8 +8,14 @@ from dataclasses import dataclass
 import traceback
 import time
 
-from qiskit import QuantumCircuit
-from qiskit.quantum_info import Statevector, DensityMatrix
+try:
+    from qiskit import QuantumCircuit
+except ImportError:
+    from qecc_qml.core.fallback_imports import QuantumCircuit
+try:
+    from qiskit.quantum_info import Statevector, DensityMatrix
+except ImportError:
+    from qecc_qml.core.fallback_imports import Statevector, DensityMatrix
 
 from ..utils.logging_config import get_logger
 from ..core.circuit_validation import CircuitValidator, SecurityManager

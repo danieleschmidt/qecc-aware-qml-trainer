@@ -13,17 +13,15 @@ import json
 import time
 
 try:
-    try:
     from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
-except ImportError:
-    from qecc_qml.core.fallback_imports import QuantumCircuit, QuantumRegister, ClassicalRegister
-    try:
     from qiskit.quantum_info import Pauli, SparsePauliOp
-except ImportError:
-    from qecc_qml.core.fallback_imports import Pauli, SparsePauliOp
     QISKIT_AVAILABLE = True
 except ImportError:
-    QISKIT_AVAILABLE = False
+    try:
+        from qecc_qml.core.fallback_imports import QuantumCircuit, QuantumRegister, ClassicalRegister, Pauli, SparsePauliOp
+        QISKIT_AVAILABLE = True
+    except ImportError:
+        QISKIT_AVAILABLE = False
 
 
 @dataclass

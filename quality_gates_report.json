@@ -1,16 +1,50 @@
 {
-  "timestamp": "2025-08-14 14:00:25",
-  "total_tests": 17,
-  "failures": 0,
-  "errors": 1,
-  "skipped": 0,
-  "success_rate": 0.9411764705882353,
-  "execution_time": 0.5213057994842529,
-  "modules_tested": {
-    "core": true,
-    "datasets": true,
-    "basic_trainer": true,
-    "robust_trainer": true,
-    "scalable_trainer": true
-  }
+  "timestamp": 1755392844.81909,
+  "framework": "QECC-QML",
+  "version": "0.1.0",
+  "summary": {
+    "total_tests": 7,
+    "passed_tests": 0,
+    "failed_tests": 7,
+    "success_rate": 0.0,
+    "total_execution_time": 0.015577077865600586
+  },
+  "detailed_results": {
+    "Core Imports": {
+      "success": false,
+      "execution_time": 0.00011849403381347656,
+      "status": "FAIL"
+    },
+    "Basic Functionality": {
+      "success": false,
+      "execution_time": 8.416175842285156e-05,
+      "status": "FAIL"
+    },
+    "Monitoring System": {
+      "success": false,
+      "execution_time": 0.014140844345092773,
+      "status": "FAIL"
+    },
+    "Validation Framework": {
+      "success": false,
+      "execution_time": 0.00010919570922851562,
+      "status": "FAIL"
+    },
+    "Optimization Components": {
+      "success": false,
+      "execution_time": 7.963180541992188e-05,
+      "status": "FAIL"
+    },
+    "Error Recovery": {
+      "success": false,
+      "execution_time": 0.0008151531219482422,
+      "status": "FAIL"
+    },
+    "Performance Tests": {
+      "success": false,
+      "execution_time": 0.0002295970916748047,
+      "status": "FAIL"
+    }
+  },
+  "overall_status": "FAIL"
 }

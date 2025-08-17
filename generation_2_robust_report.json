@@ -1,0 +1,121 @@
+{
+  "system_status": {
+    "timestamp": 1755393280.5237527,
+    "system_health": {
+      "timestamp": 1755393280.5221589,
+      "cpu_usage": 72.6788102388382,
+      "memory_usage": 51.0443434715271,
+      "error_count": 2,
+      "warning_count": 0,
+      "performance_score": 0.5209228209654491,
+      "status": "CRITICAL"
+    },
+    "error_statistics": {
+      "total_errors": 1,
+      "recent_errors": 1,
+      "error_rate": 0.2,
+      "severity_distribution": {
+        "HIGH": 1
+      },
+      "common_errors": [
+        [
+          "ValueError:Simulated error for testing",
+          {
+            "count": 1,
+            "last_seen": 1755393279.5233068
+          }
+        ]
+      ],
+      "recovery_strategies_count": 1
+    },
+    "operation_statistics": {
+      "total_operations": 5,
+      "recent_operations": 5,
+      "success_rate": 1.0,
+      "avg_execution_time": 0.2003236770629883
+    },
+    "overall_status": "CRITICAL"
+  },
+  "operation_results": [
+    {
+      "name": "quantum_circuit_creation",
+      "start_time": 1755393279.5220032,
+      "status": "SUCCESS",
+      "result": {
+        "num_qubits": 4,
+        "gates": [
+          "h",
+          "cx",
+          "measure"
+        ],
+        "depth": 3
+      },
+      "error": null,
+      "validation_results": {
+        "parameters_valid": true,
+        "validation_results": [],
+        "timestamp": 1755393279.5220103
+      },
+      "execution_time": 9.775161743164062e-06
+    },
+    {
+      "name": "data_validation",
+      "start_time": 1755393279.522024,
+      "status": "SUCCESS",
+      "result": {
+        "X_shape": [
+          3,
+          3
+        ],
+        "y_shape": 3
+      },
+      "error": null,
+      "validation_results": {
+        "parameters_valid": true,
+        "validation_results": [],
+        "timestamp": 1755393279.5220277
+      },
+      "execution_time": 7.152557373046875e-06
+    },
+    {
+      "name": "error_simulation",
+      "start_time": 1755393279.522036,
+      "status": "RECOVERED",
+      "result": null,
+      "error": "Simulated error for testing",
+      "validation_results": {
+        "parameters_valid": true,
+        "validation_results": [],
+        "timestamp": 1755393279.5220382
+      },
+      "execution_time": 1.0015840530395508
+    },
+    {
+      "name": "recovery_test",
+      "start_time": 1755393280.523638,
+      "status": "SUCCESS",
+      "result": "Recovery test completed",
+      "error": null,
+      "validation_results": {
+        "parameters_valid": true,
+        "validation_results": [],
+        "timestamp": 1755393280.5236475
+      },
+      "execution_time": 1.1682510375976562e-05
+    },
+    {
+      "name": "monitoring_check",
+      "start_time": 1755393280.5236979,
+      "status": "SUCCESS",
+      "result": "Monitoring systems operational",
+      "error": null,
+      "validation_results": {
+        "parameters_valid": true,
+        "validation_results": [],
+        "timestamp": 1755393280.5237017
+      },
+      "execution_time": 5.7220458984375e-06
+    }
+  ],
+  "generation": "G2_ROBUST"
+}

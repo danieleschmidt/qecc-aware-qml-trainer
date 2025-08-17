@@ -1,0 +1,79 @@
+{
+  "generation": "G3_SCALABLE",
+  "performance_report": {
+    "timestamp": 1755393390.4888494,
+    "cache_performance": {
+      "hit_count": 1,
+      "miss_count": 1,
+      "hit_rate": 0.5,
+      "l1_entries": 1,
+      "l2_entries": 0,
+      "memory_usage_mb": 1.621246337890625e-05,
+      "memory_limit_mb": 200.0
+    },
+    "parallel_performance": {
+      "total_tasks": 17,
+      "max_workers": 8,
+      "average_execution_time": 0.00044069570653578816,
+      "average_throughput": 2297.775028328519,
+      "parallel_efficiency": 1.0,
+      "total_processing_time": 0.0074918270111083984,
+      "metrics_sample": [
+        "PerformanceMetrics(timestamp=1755393389.7843492, operation_name='_process_chunk_chunk_12', execution_time=0.000492095947265625, throughput=2032.124031007752, memory_usage=0, cache_hits=0, cache_misses=0, parallel_efficiency=1.0)",
+        "PerformanceMetrics(timestamp=1755393389.7848573, operation_name='_process_chunk_chunk_13', execution_time=0.00047707557678222656, throughput=2096.103948025987, memory_usage=0, cache_hits=0, cache_misses=0, parallel_efficiency=1.0)",
+        "PerformanceMetrics(timestamp=1755393389.78534, operation_name='_process_chunk_chunk_14', execution_time=0.00049591064453125, throughput=2016.4923076923078, memory_usage=0, cache_hits=0, cache_misses=0, parallel_efficiency=1.0)",
+        "PerformanceMetrics(timestamp=1755393389.78617, operation_name='_process_chunk_chunk_15', execution_time=0.0004296302795410156, throughput=2327.5826859045505, memory_usage=0, cache_hits=0, cache_misses=0, parallel_efficiency=1.0)",
+        "PerformanceMetrics(timestamp=1755393389.78663, operation_name='_process_chunk_chunk_16', execution_time=0.00031757354736328125, throughput=3148.876876876877, memory_usage=0, cache_hits=0, cache_misses=0, parallel_efficiency=1.0)"
+      ]
+    },
+    "scaling_performance": {
+      "current_scale": 0.7349999999999999,
+      "scaling_events": 3,
+      "recent_average_load": 0.5285714285714286,
+      "scaling_range": {
+        "min": 0.1,
+        "max": 10.0
+      },
+      "scaling_history": [
+        {
+          "timestamp": 1755393389.787081,
+          "decision": "scale_down",
+          "old_scale": 0.48999999999999994,
+          "new_scale": 0.7,
+          "load": 0.3
+        },
+        {
+          "timestamp": 1755393390.0878086,
+          "decision": "scale_up",
+          "old_scale": 0.6999999999999998,
+          "new_scale": 1.0499999999999998,
+          "load": 0.9
+        },
+        {
+          "timestamp": 1755393390.3884828,
+          "decision": "scale_down",
+          "old_scale": 0.5144999999999998,
+          "new_scale": 0.7349999999999999,
+          "load": 0.2
+        }
+      ],
+      "load_stability": 0.9436734693877551
+    },
+    "function_optimization": {
+      "expensive_computation": {
+        "call_count": 1,
+        "total_time": 0.010114431381225586,
+        "cache_hits": 0,
+        "avg_time": 0.010114431381225586,
+        "cache_hit_rate": 0.0
+      }
+    },
+    "total_optimizations": 1,
+    "overall_efficiency": 0.8145578231292516
+  },
+  "test_results": {
+    "cache_speedup": 10.185956954956055,
+    "parallel_speedup": 0.6981917106737078,
+    "load_balance_time": 0.051181793212890625
+  }
+}

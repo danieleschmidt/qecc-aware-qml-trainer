@@ -14,15 +14,16 @@ import time
 import warnings
 
 try:
-    try:
     from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 except ImportError:
     from qecc_qml.core.fallback_imports import QuantumCircuit, QuantumRegister, ClassicalRegister
-    try:
+
+try:
     from qiskit.quantum_info import Pauli, SparsePauliOp, Operator
 except ImportError:
     from qecc_qml.core.fallback_imports import Pauli, SparsePauliOp, Operator
-    try:
+
+try:
     from qiskit.circuit import Gate, Instruction
 except ImportError:
     from qecc_qml.core.fallback_imports import Gate, Instruction

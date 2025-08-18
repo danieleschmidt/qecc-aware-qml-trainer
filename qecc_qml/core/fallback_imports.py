@@ -260,6 +260,11 @@ except ImportError:
         UserWarning
     )
     
+    # Add transpile fallback
+    def transpile(circuit, *args, **kwargs):
+        """Fallback transpile function."""
+        return circuit
+    
     class QuantumCircuit:
         """Mock quantum circuit implementation."""
         

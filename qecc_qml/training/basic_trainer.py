@@ -227,31 +227,31 @@ class BasicQECCTrainer:
             print("Training completed!")
         
         return self.history
-    \
-    def predict(self, X: np.ndarray) -> np.ndarray:\
+    
+    def predict(self, X: np.ndarray) -> np.ndarray:
         """Predict using the trained model."""
-        if self.current_params is None:\
-            raise ValueError(\"Model not trained yet. Call fit() first.\")\
-        \
-        predictions = []\
-        for x_sample in X:\
-            # Simple prediction logic (placeholder)\
-            param_sum = np.sum(self.current_params * np.tile(x_sample, len(self.current_params) // len(x_sample) + 1)[:len(self.current_params)])\
-            prob = 1 / (1 + np.exp(-param_sum))\
-            prediction = 1 if prob > 0.5 else 0\
-            predictions.append(prediction)\
-        \
-        return np.array(predictions)\
-    \
-    def evaluate(self, X: np.ndarray, y: np.ndarray) -> Dict[str, float]:\
-        \"""Evaluate the model on test data.\"""\
-        if self.current_params is None:\
-            raise ValueError(\"Model not trained yet. Call fit() first.\")\
-        \
-        loss, accuracy = self._evaluate_circuit(self.current_params, X, y)\
-        \
-        return {\
-            'loss': loss,\
-            'accuracy': accuracy,\
-            'fidelity': max(0.5, 1.0 - loss)\
-        }\
+        if self.current_params is None:
+            raise ValueError("Model not trained yet. Call fit() first.")
+        
+        predictions = []
+        for x_sample in X:
+            # Simple prediction logic (placeholder)
+            param_sum = np.sum(self.current_params * np.tile(x_sample, len(self.current_params) // len(x_sample) + 1)[:len(self.current_params)])
+            prob = 1 / (1 + np.exp(-param_sum))
+            prediction = 1 if prob > 0.5 else 0
+            predictions.append(prediction)
+        
+        return np.array(predictions)
+    
+    def evaluate(self, X: np.ndarray, y: np.ndarray) -> Dict[str, float]:
+        """Evaluate the model on test data."""
+        if self.current_params is None:
+            raise ValueError("Model not trained yet. Call fit() first.")
+        
+        loss, accuracy = self._evaluate_circuit(self.current_params, X, y)
+        
+        return {
+            'loss': loss,
+            'accuracy': accuracy,
+            'fidelity': max(0.5, 1.0 - loss)
+        }

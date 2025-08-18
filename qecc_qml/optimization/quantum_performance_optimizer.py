@@ -18,7 +18,6 @@ from collections import defaultdict
 import json
 
 try:
-    try:
     from qiskit import QuantumCircuit, transpile
 except ImportError:
     from qecc_qml.core.fallback_imports import QuantumCircuit, transpile

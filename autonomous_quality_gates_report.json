@@ -1,5 +1,5 @@
 {
-  "timestamp": 1755392967.4049852,
+  "timestamp": 1755641626.1628203,
   "framework": "QECC-QML Autonomous SDLC",
   "version": "0.1.0",
   "execution_mode": "autonomous",
@@ -8,54 +8,54 @@
     "passed_tests": 7,
     "failed_tests": 1,
     "success_rate": 87.5,
-    "total_duration": 0.023811817169189453
+    "total_duration": 0.02589106559753418
   },
   "detailed_results": {
     "Python Environment": {
       "success": true,
-      "duration": 0.0002734661102294922,
+      "duration": 0.00029659271240234375,
       "error": null,
       "status": "PASS"
     },
     "Code Structure": {
       "success": true,
-      "duration": 0.0003597736358642578,
+      "duration": 0.00019311904907226562,
       "error": null,
       "status": "PASS"
     },
     "Import Structure": {
       "success": false,
-      "duration": 0.022972822189331055,
+      "duration": 0.0251619815826416,
       "error": "Test returned False",
       "status": "FAIL"
     },
     "Autonomous Functionality": {
       "success": true,
-      "duration": 4.8160552978515625e-05,
+      "duration": 7.581710815429688e-05,
       "error": null,
       "status": "PASS"
     },
     "Quality Gate Implementation": {
       "success": true,
-      "duration": 4.0531158447265625e-06,
+      "duration": 6.9141387939453125e-06,
       "error": null,
       "status": "PASS"
     },
     "Generation Progression": {
       "success": true,
-      "duration": 2.384185791015625e-06,
+      "duration": 3.5762786865234375e-06,
       "error": null,
       "status": "PASS"
     },
     "Research Framework": {
       "success": true,
-      "duration": 4.291534423828125e-06,
+      "duration": 5.7220458984375e-06,
       "error": null,
       "status": "PASS"
     },
     "Autonomous Execution": {
       "success": true,
-      "duration": 1.1920928955078125e-06,
+      "duration": 1.6689300537109375e-06,
       "error": null,
       "status": "PASS"
     }

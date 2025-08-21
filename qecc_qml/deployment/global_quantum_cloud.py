@@ -19,10 +19,9 @@ import concurrent.futures
 import threading
 import uuid
 
-# Fallback imports
-sys.path.insert(0, '/root/repo')
-from qecc_qml.core.fallback_imports import create_fallback_implementations
-create_fallback_implementations()
+# Simplified import - avoid complex dependencies for demo
+import warnings
+warnings.filterwarnings("ignore")
 
 @dataclass
 class QuantumDevice:

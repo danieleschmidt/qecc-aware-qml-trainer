@@ -273,6 +273,24 @@ class QECCAwareQNN:
         """Get the number of trainable parameters."""
         return len(self.weight_params)
     
+    @property
+    def parameters(self) -> np.ndarray:
+        """Get trainable parameters as numpy array."""
+        if not hasattr(self, '_parameters'):
+            # Initialize with random values
+            self._parameters = np.random.uniform(
+                0, 2*np.pi, 
+                self.get_num_parameters()
+            )
+        return self._parameters
+    
+    @parameters.setter
+    def parameters(self, params: np.ndarray):
+        """Set trainable parameters."""
+        if len(params) != self.get_num_parameters():
+            raise ValueError(f"Expected {self.get_num_parameters()} parameters, got {len(params)}")
+        self._parameters = params.copy()
+    
     def get_circuit_depth(self) -> int:
         """Get the circuit depth."""
         return self._full_circuit.depth()

@@ -284,3 +284,22 @@ def load_quantum_classification(dataset: str = 'synthetic', **kwargs) -> Tuple[n
         return SimpleQuantumDatasets.get_iris_quantum(**kwargs)
     else:
         raise ValueError(f"Unknown dataset: {dataset}")
+
+def create_test_dataset(n_samples: int = 100, n_features: int = 4, **kwargs) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Create a simple test dataset for quality gates.
+    
+    Args:
+        n_samples: Number of samples
+        n_features: Number of features
+        **kwargs: Additional parameters
+        
+    Returns:
+        Tuple of (X, y) for testing
+    """
+    return SimpleQuantumDatasets.generate_classification_data(
+        n_samples=n_samples,
+        n_features=n_features,
+        random_state=42,
+        **kwargs
+    )

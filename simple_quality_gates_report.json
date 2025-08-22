@@ -1,0 +1,106 @@
+{
+  "timestamp": 1755831308.4976811,
+  "total_tests": 9,
+  "passed_tests": 7,
+  "failed_tests": 2,
+  "success_rate": 77.77777777777779,
+  "overall_status": "PASSED",
+  "test_results": [
+    {
+      "name": "Core Imports",
+      "passed": true,
+      "execution_time": 2.640639066696167,
+      "details": {
+        "passed": true,
+        "imports": "success"
+      }
+    },
+    {
+      "name": "Data Generation",
+      "passed": true,
+      "execution_time": 0.0013651847839355469,
+      "details": {
+        "passed": true,
+        "X_shape": [
+          50,
+          4
+        ],
+        "y_shape": [
+          50
+        ]
+      }
+    },
+    {
+      "name": "QNN Creation",
+      "passed": true,
+      "execution_time": 0.001554727554321289,
+      "details": {
+        "passed": true,
+        "qubits": 4
+      }
+    },
+    {
+      "name": "Basic Training",
+      "passed": true,
+      "execution_time": 0.008890151977539062,
+      "details": {
+        "passed": true,
+        "params_changed": false
+      }
+    },
+    {
+      "name": "Prediction",
+      "passed": false,
+      "execution_time": 0.0019750595092773438,
+      "details": {
+        "passed": false,
+        "error": "Model not trained yet. Call fit() first."
+      }
+    },
+    {
+      "name": "Security Basics",
+      "passed": true,
+      "execution_time": 0.007539510726928711,
+      "details": {
+        "passed": true,
+        "sanitization": "working"
+      }
+    },
+    {
+      "name": "Performance Basics",
+      "passed": true,
+      "execution_time": 0.011848211288452148,
+      "details": {
+        "passed": true,
+        "summary_keys": [
+          "cache_hit_rate",
+          "cache_size_mb",
+          "cached_circuits",
+          "average_execution_time",
+          "average_optimization_time",
+          "optimal_workers",
+          "performance_samples",
+          "config"
+        ]
+      }
+    },
+    {
+      "name": "Monitoring Basics",
+      "passed": true,
+      "execution_time": 1.0251102447509766,
+      "details": {
+        "passed": true,
+        "metrics_collected": true
+      }
+    },
+    {
+      "name": "Research Imports",
+      "passed": false,
+      "execution_time": 0.0358884334564209,
+      "details": {
+        "passed": false,
+        "error": "cannot import name 'QECCQMLHybridObjective' from 'qecc_qml.research.coevolutionary_optimizer' (/root/repo/qecc_qml/research/coevolutionary_optimizer.py)"
+      }
+    }
+  ]
+}

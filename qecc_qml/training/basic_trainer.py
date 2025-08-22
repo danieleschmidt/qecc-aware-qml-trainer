@@ -255,3 +255,44 @@ class BasicQECCTrainer:
             'accuracy': accuracy,
             'fidelity': max(0.5, 1.0 - loss)
         }
+    
+    def get_parameters(self) -> np.ndarray:
+        """Get current model parameters."""
+        if self.current_params is None:
+            # Initialize if not already done
+            self.current_params = self.qnn.parameters
+        return self.current_params.copy()
+    
+    def train_step(self, X: np.ndarray, y: np.ndarray) -> Dict[str, float]:
+        """Perform a single training step."""
+        # Initialize parameters if needed
+        if self.current_params is None:
+            self.current_params = self.qnn.parameters.copy()
+        
+        # Compute gradients
+        gradients = self._compute_gradients(self.current_params, X, y)
+        
+        # Update parameters
+        self.current_params -= self.learning_rate * gradients
+        
+        # Evaluate current performance
+        loss, accuracy = self._evaluate_circuit(self.current_params, X, y)
+        
+        return {
+            'loss': loss,
+            'accuracy': accuracy,
+            'fidelity': max(0.5, 1.0 - loss)
+        }
+    
+    def compute_loss(self, X: np.ndarray, y: np.ndarray) -> float:
+        """Compute loss for given data."""
+        if self.current_params is None:
+            self.current_params = self.qnn.parameters.copy()
+        
+        loss, _ = self._evaluate_circuit(self.current_params, X, y)
+        return loss
+    
+    @property
+    def model(self):
+        """Compatibility property for accessing the QNN."""
+        return self.qnn

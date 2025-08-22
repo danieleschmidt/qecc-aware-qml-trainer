@@ -1,77 +1,130 @@
 {
-  "timestamp": 1755641626.1628203,
-  "framework": "QECC-QML Autonomous SDLC",
-  "version": "0.1.0",
-  "execution_mode": "autonomous",
-  "summary": {
-    "total_tests": 8,
-    "passed_tests": 7,
-    "failed_tests": 1,
-    "success_rate": 87.5,
-    "total_duration": 0.02589106559753418
-  },
-  "detailed_results": {
-    "Python Environment": {
-      "success": true,
-      "duration": 0.00029659271240234375,
-      "error": null,
-      "status": "PASS"
+  "timestamp": 1755831183.6326764,
+  "total_gates": 10,
+  "passed_gates": 0,
+  "failed_gates": 10,
+  "success_rate": 0.0,
+  "total_execution_time": 7.329509735107422,
+  "overall_status": "FAILED",
+  "gate_results": [
+    {
+      "name": "Core Functionality Tests",
+      "passed": false,
+      "execution_time": 0.00640869140625,
+      "details": {
+        "passed": false,
+        "error": "'BasicQECCTrainer' object has no attribute 'get_parameters'",
+        "traceback": "Traceback (most recent call last):\n  File \"/root/repo/test_autonomous_quality_gates.py\", line 182, in _test_core_functionality\n    initial_params = trainer.get_parameters()\n                     ^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'BasicQECCTrainer' object has no attribute 'get_parameters'\n"
+      }
     },
-    "Code Structure": {
-      "success": true,
-      "duration": 0.00019311904907226562,
-      "error": null,
-      "status": "PASS"
+    {
+      "name": "Security Validation",
+      "passed": false,
+      "execution_time": 0.002622365951538086,
+      "details": {
+        "passed": false,
+        "error": "'QECCAwareQNN' object has no attribute 'create_circuit'",
+        "traceback": "Traceback (most recent call last):\n  File \"/root/repo/test_autonomous_quality_gates.py\", line 220, in _test_security_validation\n    circuit = qnn.create_circuit(np.random.rand(4))\n              ^^^^^^^^^^^^^^^^^^\nAttributeError: 'QECCAwareQNN' object has no attribute 'create_circuit'. Did you mean: '_feature_circuit'?\n"
+      }
     },
-    "Import Structure": {
-      "success": false,
-      "duration": 0.0251619815826416,
-      "error": "Test returned False",
-      "status": "FAIL"
+    {
+      "name": "Performance Benchmarks",
+      "passed": false,
+      "execution_time": 0.002621173858642578,
+      "details": {
+        "passed": false,
+        "error": "'QECCAwareQNN' object has no attribute 'create_circuit'",
+        "traceback": "Traceback (most recent call last):\n  File \"/root/repo/test_autonomous_quality_gates.py\", line 273, in _test_performance_benchmarks\n    circuit = qnn.create_circuit(np.random.rand(4))\n              ^^^^^^^^^^^^^^^^^^\nAttributeError: 'QECCAwareQNN' object has no attribute 'create_circuit'. Did you mean: '_feature_circuit'?\n"
+      }
     },
-    "Autonomous Functionality": {
-      "success": true,
-      "duration": 7.581710815429688e-05,
-      "error": null,
-      "status": "PASS"
+    {
+      "name": "Robustness Tests",
+      "passed": false,
+      "execution_time": 0.003488302230834961,
+      "details": {
+        "passed": false,
+        "error": "'QECCAwareQNN' object has no attribute 'create_circuit'",
+        "traceback": "Traceback (most recent call last):\n  File \"/root/repo/test_autonomous_quality_gates.py\", line 341, in _test_robustness\n    circuit = qnn.create_circuit(np.random.rand(4))\n              ^^^^^^^^^^^^^^^^^^\nAttributeError: 'QECCAwareQNN' object has no attribute 'create_circuit'. Did you mean: '_feature_circuit'?\n"
+      }
     },
-    "Quality Gate Implementation": {
-      "success": true,
-      "duration": 6.9141387939453125e-06,
-      "error": null,
-      "status": "PASS"
+    {
+      "name": "Scalability Tests",
+      "passed": false,
+      "execution_time": 6.006693363189697,
+      "details": {
+        "passed": false,
+        "error": "'QECCAwareQNN' object has no attribute 'create_circuit'",
+        "traceback": "Traceback (most recent call last):\n  File \"/root/repo/test_autonomous_quality_gates.py\", line 418, in _test_scalability\n    circuit = qnn.create_circuit(np.random.rand(4))\n              ^^^^^^^^^^^^^^^^^^\nAttributeError: 'QECCAwareQNN' object has no attribute 'create_circuit'. Did you mean: '_feature_circuit'?\n"
+      }
     },
-    "Generation Progression": {
-      "success": true,
-      "duration": 3.5762786865234375e-06,
-      "error": null,
-      "status": "PASS"
+    {
+      "name": "Integration Tests",
+      "passed": false,
+      "execution_time": 0.0040318965911865234,
+      "details": {
+        "passed": false,
+        "error": "'BasicQECCTrainer' object has no attribute 'compute_loss'",
+        "traceback": "Traceback (most recent call last):\n  File \"/root/repo/test_autonomous_quality_gates.py\", line 475, in _test_integration\n    initial_loss = trainer.compute_loss(X_test[:5], y_test[:5])\n                   ^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'BasicQECCTrainer' object has no attribute 'compute_loss'\n"
+      }
     },
-    "Research Framework": {
-      "success": true,
-      "duration": 5.7220458984375e-06,
-      "error": null,
-      "status": "PASS"
+    {
+      "name": "Research Framework Tests",
+      "passed": false,
+      "execution_time": 0.14574456214904785,
+      "details": {
+        "passed": false,
+        "error": "cannot import name 'QECCQMLHybridObjective' from 'qecc_qml.research.coevolutionary_optimizer' (/root/repo/qecc_qml/research/coevolutionary_optimizer.py)",
+        "traceback": "Traceback (most recent call last):\n  File \"/root/repo/test_autonomous_quality_gates.py\", line 520, in _test_research_framework\n    from qecc_qml import research\n  File \"/root/repo/qecc_qml/research/__init__.py\", line 81, in <module>\n    from .coevolutionary_optimizer import (\nImportError: cannot import name 'QECCQMLHybridObjective' from 'qecc_qml.research.coevolutionary_optimizer' (/root/repo/qecc_qml/research/coevolutionary_optimizer.py)\n"
+      }
     },
-    "Autonomous Execution": {
-      "success": true,
-      "duration": 1.6689300537109375e-06,
-      "error": null,
-      "status": "PASS"
+    {
+      "name": "Error Handling Tests",
+      "passed": false,
+      "execution_time": 0.13567757606506348,
+      "details": {
+        "passed": false,
+        "error_handling_tests": {
+          "none_circuit_handled": false,
+          "empty_data_handled": true,
+          "memory_optimization": true,
+          "fallback_imports": true
+        },
+        "total_error_tests": 4,
+        "passed_error_tests": 3,
+        "error_handling_rate": 75.0
+      }
+    },
+    {
+      "name": "Resource Management Tests",
+      "passed": false,
+      "execution_time": 1.0076539516448975,
+      "details": {
+        "passed": false,
+        "error": "'QECCAwareQNN' object has no attribute 'create_circuit'",
+        "traceback": "Traceback (most recent call last):\n  File \"/root/repo/test_autonomous_quality_gates.py\", line 636, in _test_resource_management\n    circuit = qnn.create_circuit(np.random.rand(4))\n              ^^^^^^^^^^^^^^^^^^\nAttributeError: 'QECCAwareQNN' object has no attribute 'create_circuit'. Did you mean: '_feature_circuit'?\n"
+      }
+    },
+    {
+      "name": "Final System Validation",
+      "passed": false,
+      "execution_time": 0.00722813606262207,
+      "details": {
+        "passed": false,
+        "validation_score": 57.14285714285714,
+        "validation_checks": {
+          "qnn_creation": true,
+          "data_generation": true,
+          "security_validation": false,
+          "training_process": false,
+          "prediction_capability": false,
+          "system_health": true,
+          "performance_optimization": true
+        },
+        "total_checks": 7,
+        "passed_checks": 4,
+        "training_steps_completed": 5,
+        "system_ready_for_production": false
+      }
     }
-  },
-  "quality_gates": {
-    "code_runs": true,
-    "tests_pass": true,
-    "security_clean": true,
-    "performance_met": true,
-    "docs_updated": true
-  },
-  "overall_status": "PASS",
-  "next_actions": [
-    "proceed_to_generation_1",
-    "implement_novel_algorithms",
-    "execute_research_framework",
-    "deploy_autonomous_improvements"
   ]
 }

@@ -52,6 +52,29 @@ class BasicQECCTrainer:
         
         # Current parameters (will be initialized from QNN)
         self.current_params = None
+        self._initialize_parameters()
+    
+    def _initialize_parameters(self):
+        """Initialize the variational parameters."""
+        num_params = len(self.qnn.weight_params)
+        self.current_params = np.random.normal(0, 0.1, num_params)
+    
+    def get_parameters(self) -> np.ndarray:
+        """Get current parameters."""
+        if self.current_params is None:
+            self._initialize_parameters()
+        return self.current_params.copy()
+    
+    def set_parameters(self, params: np.ndarray):
+        """Set parameters."""
+        self.current_params = params.copy()
+    
+    def compute_loss(self, X: np.ndarray, y: np.ndarray) -> float:
+        """Compute loss for given data."""
+        if self.current_params is None:
+            self._initialize_parameters()
+        loss, _ = self._evaluate_circuit(self.current_params, X, y)
+        return loss
         
     def _evaluate_circuit(self, params: np.ndarray, X: np.ndarray, y: np.ndarray) -> Tuple[float, float]:
         """

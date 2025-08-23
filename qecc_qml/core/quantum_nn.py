@@ -189,6 +189,52 @@ class QECCAwareQNN:
         
         return circuit
     
+    def create_circuit(
+        self,
+        x: np.ndarray,
+        parameters: np.ndarray = None
+    ) -> QuantumCircuit:
+        """
+        Create a quantum circuit for the given input and parameters.
+        
+        Args:
+            x: Input features
+            parameters: Variational parameters (optional)
+            
+        Returns:
+            QuantumCircuit: The parameterized quantum circuit
+        """
+        if parameters is None:
+            parameters = np.random.random(len(self.weight_params))
+        
+        # Create parameter binding dictionary
+        param_dict = {}
+        
+        # Bind feature parameters
+        for i, param in enumerate(self.feature_params):
+            if i < len(x):
+                param_dict[param] = x[i]
+            else:
+                param_dict[param] = 0.0
+        
+        # Bind weight parameters
+        for i, param in enumerate(self.weight_params):
+            if i < len(parameters):
+                param_dict[param] = parameters[i]
+            else:
+                param_dict[param] = 0.0
+        
+        # Bind parameters to circuit
+        if hasattr(self._full_circuit, 'assign_parameters'):
+            bound_circuit = self._full_circuit.assign_parameters(param_dict)
+        elif hasattr(self._full_circuit, 'bind_parameters'):
+            bound_circuit = self._full_circuit.bind_parameters(param_dict)
+        else:
+            # Fallback: return original circuit if no parameter binding available
+            bound_circuit = self._full_circuit.copy()
+        
+        return bound_circuit
+    
     def forward(
         self,
         x: np.ndarray,

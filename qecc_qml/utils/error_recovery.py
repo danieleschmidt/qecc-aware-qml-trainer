@@ -1,13 +1,87 @@
 """
-Robust error recovery and fault tolerance for QECC-QML operations.
+Error recovery utilities for robust quantum computing operations.
 """
 
 import time
-import random
-import functools
-from typing import Any, Callable, Dict, List, Optional, Union, Tuple
-from dataclasses import dataclass
+import logging
+from typing import Any, Callable, Optional, Union, List, Dict, Tuple
+from functools import wraps
 from enum import Enum
+from dataclasses import dataclass
+import numpy as np
+
+
+class ErrorRecoveryManager:
+    """
+    Manages error recovery strategies for quantum operations.
+    """
+    
+    def __init__(
+        self,
+        max_retries: int = 3,
+        base_delay: float = 1.0,
+        max_delay: float = 60.0,
+        backoff_multiplier: float = 2.0,
+        logger: Optional[logging.Logger] = None
+    ):
+        """
+        Initialize error recovery manager.
+        """
+        self.max_retries = max_retries
+        self.base_delay = base_delay
+        self.max_delay = max_delay
+        self.backoff_multiplier = backoff_multiplier
+        self.logger = logger or logging.getLogger(__name__)
+        
+        # Error statistics
+        self.total_attempts = 0
+        self.total_failures = 0
+        self.recovery_counts = {}
+    
+    def retry_with_backoff(
+        self,
+        func: Callable,
+        *args,
+        **kwargs
+    ) -> Any:
+        """
+        Execute function with exponential backoff retry logic.
+        """
+        last_exception = None
+        delay = self.base_delay
+        
+        for attempt in range(self.max_retries + 1):
+            self.total_attempts += 1
+            
+            try:
+                result = func(*args, **kwargs)
+                
+                if attempt > 0:
+                    self.logger.info(f"Operation succeeded after {attempt} retries")
+                
+                return result
+                
+            except Exception as e:
+                last_exception = e
+                self.total_failures += 1
+                
+                error_type = type(e).__name__
+                self.recovery_counts[error_type] = self.recovery_counts.get(error_type, 0) + 1
+                
+                if attempt < self.max_retries:
+                    self.logger.warning(
+                        f"Attempt {attempt + 1} failed with {error_type}: {e}. "
+                        f"Retrying in {delay:.1f} seconds..."
+                    )
+                    time.sleep(delay)
+                    delay = min(delay * self.backoff_multiplier, self.max_delay)
+                else:
+                    self.logger.error(
+                        f"All {self.max_retries + 1} attempts failed. "
+                        f"Final error: {error_type}: {e}"
+                    )
+        
+        raise last_exception
 import traceback
 import threading
 

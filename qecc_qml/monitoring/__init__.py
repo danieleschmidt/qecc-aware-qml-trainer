@@ -19,7 +19,7 @@ except ImportError:
 from .metrics_collector import MetricsCollector, MetricType
 from .real_time_monitor import RealTimeMonitor, MonitoringEvent
 from .alerts import AlertManager, AlertRule, AlertSeverity
-from .health_monitor import HealthMonitor
+from .health_monitor_final import HealthMonitor
 from .comprehensive_health_monitor import ComprehensiveHealthMonitor, MonitoringConfig
 
 __all__ = [

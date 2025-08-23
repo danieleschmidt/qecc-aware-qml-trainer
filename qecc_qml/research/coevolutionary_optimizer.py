@@ -49,15 +49,42 @@ class OptimizerType(Enum):
     GLOBAL_COEVOLUTIONARY_OPTIMIZER = "global_coevolutionary_optimizer"
 
 
+class OptimizationTarget(Enum):
+    """Optimization targets for multi-objective optimization."""
+    ACCURACY = "accuracy"
+    NOISE_RESILIENCE = "noise_resilience"
+    CIRCUIT_DEPTH = "circuit_depth"
+    TRAINING_EFFICIENCY = "training_efficiency"
+    ERROR_CORRECTION_THRESHOLD = "error_correction_threshold"
+
+
 @dataclass
-class OptimizationTarget:
-    """Target for optimization with constraints and objectives."""
-    target_id: str
-    objectives: Dict[str, float]  # objective_name -> target_value
-    constraints: Dict[str, Tuple[float, float]]  # constraint_name -> (min, max)
-    weights: Dict[str, float]  # objective_name -> weight
-    priority: int = 1
-    adaptive_weights: bool = True
+class CoevolutionaryIndividual:
+    """Individual in coevolutionary population."""
+    genome: List[float] = field(default_factory=list)
+    fitness_scores: Dict[str, float] = field(default_factory=dict)
+    age: int = 0
+    generation: int = 0
+    parent_ids: List[int] = field(default_factory=list)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass 
+class QECCQMLHybridObjective:
+    """Hybrid objective function for QECC-QML optimization."""
+    accuracy_weight: float = 0.4
+    noise_resilience_weight: float = 0.3
+    efficiency_weight: float = 0.2
+    error_correction_weight: float = 0.1
+    
+    def __call__(self, metrics: Dict[str, float]) -> float:
+        """Compute weighted objective score."""
+        return (
+            metrics.get('accuracy', 0.0) * self.accuracy_weight +
+            metrics.get('noise_resilience', 0.0) * self.noise_resilience_weight +
+            metrics.get('efficiency', 0.0) * self.efficiency_weight +
+            metrics.get('error_correction_effectiveness', 0.0) * self.error_correction_weight
+        )
 
 
 @dataclass
@@ -71,19 +98,6 @@ class OptimizationState:
     learning_rates: Dict[str, float]
     convergence_metrics: Dict[str, float]
     search_history: List[Dict[str, Any]] = field(default_factory=list)
-
-
-@dataclass
-class CoevolutionaryIndividual:
-    """Individual in co-evolutionary optimization."""
-    individual_id: str
-    quantum_parameters: Dict[str, np.ndarray]
-    classical_parameters: Dict[str, np.ndarray]
-    interface_parameters: Dict[str, np.ndarray]
-    fitness_components: Dict[str, float]
-    total_fitness: float = 0.0
-    age: int = 0
-    success_history: List[float] = field(default_factory=list)
 
 
 class ObjectiveFunction(ABC):

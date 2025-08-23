@@ -1,15 +1,69 @@
 """
-Input validation and sanitization utilities.
+Input validation utilities for QECC-QML framework.
 """
 
 import numpy as np
-from typing import Any, Dict, List, Optional, Tuple, Union
-import warnings
-from functools import wraps
+from typing import Union, Optional, Tuple, Any, List, Dict
 
-from .logging_config import get_logger
 
-logger = get_logger(__name__)
+def validate_input_data(X: np.ndarray, y: np.ndarray) -> None:
+    """
+    Validate input training data.
+    """
+    if not isinstance(X, np.ndarray):
+        raise ValueError(f"X must be numpy array, got {type(X)}")
+    
+    if not isinstance(y, np.ndarray):
+        raise ValueError(f"y must be numpy array, got {type(y)}")
+    
+    if len(X) == 0:
+        raise ValueError("X cannot be empty")
+    
+    if len(y) == 0:
+        raise ValueError("y cannot be empty")
+    
+    if len(X) != len(y):
+        raise ValueError(f"X and y must have same length: {len(X)} vs {len(y)}")
+    
+    if X.ndim != 2:
+        raise ValueError(f"X must be 2D array, got shape {X.shape}")
+    
+    if y.ndim != 1:
+        raise ValueError(f"y must be 1D array, got shape {y.shape}")
+    
+    # Check for NaN or infinite values
+    if np.any(np.isnan(X)):
+        raise ValueError("X contains NaN values")
+    
+    if np.any(np.isnan(y)):
+        raise ValueError("y contains NaN values")
+    
+    if np.any(np.isinf(X)):
+        raise ValueError("X contains infinite values")
+    
+    if np.any(np.isinf(y)):
+        raise ValueError("y contains infinite values")
+
+
+def validate_parameters(params: np.ndarray, expected_shape: Optional[Tuple[int, ...]] = None) -> None:
+    """
+    Validate parameter array.
+    """
+    if not isinstance(params, np.ndarray):
+        raise ValueError(f"Parameters must be numpy array, got {type(params)}")
+    
+    if len(params) == 0:
+        raise ValueError("Parameters cannot be empty")
+    
+    if expected_shape and params.shape != expected_shape:
+        raise ValueError(f"Parameters shape {params.shape} does not match expected {expected_shape}")
+    
+    # Check for NaN or infinite values
+    if np.any(np.isnan(params)):
+        raise ValueError("Parameters contain NaN values")
+    
+    if np.any(np.isinf(params)):
+        raise ValueError("Parameters contain infinite values")
 
 
 class ValidationError(Exception):

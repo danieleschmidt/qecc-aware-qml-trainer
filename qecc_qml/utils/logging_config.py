@@ -1,13 +1,59 @@
 """
-Comprehensive logging configuration for QECC-aware QML.
+Logging configuration for QECC-QML framework.
 """
 
 import logging
-import logging.handlers
 import sys
-import os
 from pathlib import Path
-from typing import Dict, Optional, Union
+from typing import Optional, Union
+
+
+def setup_logging(
+    name: str = "qecc_qml",
+    level: int = logging.INFO,
+    verbose: bool = True,
+    log_file: Optional[str] = None
+) -> logging.Logger:
+    """
+    Setup logging configuration for QECC-QML framework.
+    """
+    logger = logging.getLogger(name)
+    
+    # Avoid duplicate handlers
+    if logger.handlers:
+        return logger
+    
+    logger.setLevel(level if verbose else logging.WARNING)
+    
+    # Create formatter
+    formatter = logging.Formatter(
+        '[%(asctime)s] %(name)s:%(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    
+    # Console handler
+    if verbose:
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setLevel(level)
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
+    
+    # File handler
+    if log_file:
+        log_path = Path(log_file)
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        file_handler = logging.FileHandler(log_path)
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+    
+    return logger
+
+
+def get_logger(name: str = "qecc_qml") -> logging.Logger:
+    """Get or create a logger instance."""
+    return logging.getLogger(name)
 import json
 import time
 from datetime import datetime

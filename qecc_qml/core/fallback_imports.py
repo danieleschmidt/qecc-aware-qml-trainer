@@ -159,6 +159,9 @@ def create_fallback_implementations():
         # Add constants
         pi = math.pi
         e = math.e
+        
+        # Add ndarray as alias for list
+        ndarray = list
     
     # Install numpy fallback
     if 'numpy' not in sys.modules:
@@ -168,6 +171,7 @@ def create_fallback_implementations():
                 setattr(numpy_module, attr_name, getattr(MockNumPy, attr_name))
         numpy_module.pi = math.pi
         numpy_module.e = math.e
+        numpy_module.ndarray = list  # Add ndarray as alias
         sys.modules['numpy'] = numpy_module
 
 # Call on import

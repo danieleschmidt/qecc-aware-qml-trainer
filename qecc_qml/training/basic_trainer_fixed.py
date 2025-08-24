@@ -2,8 +2,33 @@
 Fixed basic trainer for QECC-aware quantum neural networks.
 """
 
+# Import with fallback support
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+
+try:
+    from qecc_qml.core.fallback_imports import create_fallback_implementations
+    create_fallback_implementations()
+except ImportError:
+    pass
 from typing import Tuple, Optional, Dict, Any, List
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    import sys
+    if 'numpy' in sys.modules:
+        np = sys.modules['numpy']
+    else:
+        class MockNumPy:
+            @staticmethod
+            def array(x): return list(x) if isinstance(x, (list, tuple)) else x
+            @staticmethod
+            def zeros(shape): return [0] * (shape if isinstance(shape, int) else shape[0])
+            @staticmethod  
+            def ones(shape): return [1] * (shape if isinstance(shape, int) else shape[0])
+            ndarray = list
+        np = MockNumPy()
 import time
 from ..core.quantum_nn import QECCAwareQNN
 from ..core.fallback_imports import AerSimulator

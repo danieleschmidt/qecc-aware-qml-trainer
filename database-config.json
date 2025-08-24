@@ -1,0 +1,29 @@
+{
+  "primary_database": {
+    "type": "postgresql",
+    "host": "qecc-qml-db-primary",
+    "port": 5432,
+    "database": "qecc_qml",
+    "connection_pool": {
+      "min_connections": 5,
+      "max_connections": 20,
+      "connection_timeout": 30
+    },
+    "backup_retention_days": 30
+  },
+  "cache_database": {
+    "type": "redis",
+    "host": "qecc-qml-redis",
+    "port": 6379,
+    "database": 0,
+    "ttl_default": 3600,
+    "memory_limit": "2gb"
+  },
+  "quantum_state_storage": {
+    "type": "object_storage",
+    "provider": "aws_s3",
+    "bucket": "qecc-qml-quantum-states",
+    "encryption": "AES-256",
+    "versioning": true
+  }
+}

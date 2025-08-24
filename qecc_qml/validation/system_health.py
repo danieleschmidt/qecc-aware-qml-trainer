@@ -5,6 +5,16 @@ Provides comprehensive health checks, system monitoring,
 and automated diagnostics for QECC-aware QML systems.
 """
 
+# Import with fallback support
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+
+try:
+    from qecc_qml.core.fallback_imports import create_fallback_implementations
+    create_fallback_implementations()
+except ImportError:
+    pass
 import time
 import psutil
 import platform

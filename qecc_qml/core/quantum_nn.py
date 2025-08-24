@@ -3,13 +3,22 @@ Core quantum neural network implementation with QECC awareness.
 """
 
 from typing import Optional, List, Union, Dict, Any
-import numpy as np
 
-# Import with fallback support
+# Import with fallback support - create fallbacks first
 from .fallback_imports import (
+    create_fallback_implementations,
     QuantumCircuit, QuantumRegister, ClassicalRegister,
     Parameter, ParameterVector, SparsePauliOp, AerSimulator
 )
+
+# Ensure fallbacks are created before any numpy import
+create_fallback_implementations()
+
+try:
+    import numpy as np
+except ImportError:
+    import sys
+    np = sys.modules['numpy']  # Use our fallback
 
 from .error_correction import ErrorCorrectionScheme
 from .noise_models import NoiseModel

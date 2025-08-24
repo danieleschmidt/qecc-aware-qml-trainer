@@ -1,218 +1,186 @@
 {
-  "timestamp": 1755527171.2689037,
-  "total_execution_time": 2.4610464572906494,
-  "overall_status": "WARNING",
-  "summary": {
-    "total_gates": 9,
-    "passed_gates": 6,
-    "warning_gates": 2,
-    "failed_gates": 1,
-    "success_rate": 0.6666666666666666,
-    "average_score": 0.8405957975952689
+  "overall_status": "FAILED",
+  "overall_score": 86.25,
+  "execution_summary": {
+    "total_gates": 12,
+    "passed": 11,
+    "failed": 1,
+    "warnings": 0,
+    "execution_time_seconds": 0.429309606552124
+  },
+  "category_breakdown": {
+    "functional": {
+      "average_score": 0.5,
+      "max_possible": 1.0,
+      "gates_count": 2,
+      "passed": 1,
+      "threshold_met": false
+    },
+    "performance": {
+      "average_score": 0.875,
+      "max_possible": 1.0,
+      "gates_count": 2,
+      "passed": 2,
+      "threshold_met": true
+    },
+    "security": {
+      "average_score": 1.0,
+      "max_possible": 1.0,
+      "gates_count": 2,
+      "passed": 2,
+      "threshold_met": true
+    },
+    "reliability": {
+      "average_score": 0.95,
+      "max_possible": 1.0,
+      "gates_count": 2,
+      "passed": 2,
+      "threshold_met": true
+    },
+    "scalability": {
+      "average_score": 0.95,
+      "max_possible": 1.0,
+      "gates_count": 2,
+      "passed": 2,
+      "threshold_met": true
+    },
+    "research": {
+      "average_score": 0.9,
+      "max_possible": 1.0,
+      "gates_count": 2,
+      "passed": 2,
+      "threshold_met": true
+    }
   },
   "detailed_results": [
     {
-      "gate_name": "code_runs_without_errors",
-      "status": "WARNING",
-      "score": 0.75,
+      "gate_name": "Code Security Scan",
+      "type": "security",
+      "status": "passed",
+      "score_percentage": 100.0,
+      "execution_time": 0.0018432140350341797,
       "details": {
-        "error_count": 1,
-        "components_tested": {
-          "autonomous_evolution": "SUCCESS",
-          "fallback_imports": "SUCCESS",
-          "quality_gates_runner": "ERROR: name 'AutonomousQualityGates' is not defined"
-        }
-      },
-      "execution_time": 2.4290549755096436,
-      "timestamp": 1755527168.8078868
+        "security_scan": "completed",
+        "vulnerabilities": "none_detected"
+      }
     },
     {
-      "gate_name": "test_coverage_85_percent",
-      "status": "FAIL",
-      "score": 0.25,
+      "gate_name": "Input Validation and Sanitization",
+      "type": "security",
+      "status": "passed",
+      "score_percentage": 100.0,
+      "execution_time": 0.003633737564086914,
       "details": {
-        "coverage_percentage": 25.0,
-        "test_files_found": 6,
-        "source_components": 20,
-        "covered_components": 1,
-        "test_files": [
-          "/root/repo/test_basic.py",
-          "/root/repo/test_comprehensive_coverage.py",
-          "/root/repo/test_comprehensive_system.py",
-          "/root/repo/test_novel_research_validation.py",
-          "/root/repo/test_research_algorithms_simple.py",
-          "/root/repo/test_research_validation.py"
-        ]
-      },
-      "execution_time": 0.0002970695495605469,
-      "timestamp": 1755527171.2370186
+        "input_validation": 1.0
+      }
     },
     {
-      "gate_name": "security_scan_passes",
-      "status": "PASS",
-      "score": 1.0,
+      "gate_name": "Core Import Functionality",
+      "type": "functional",
+      "status": "failed",
+      "score_percentage": 0.0,
+      "execution_time": 0.026044130325317383,
       "details": {
-        "checks_passed": 5,
-        "total_checks": 5,
-        "security_issues": [],
-        "critical_vulnerabilities": 0
-      },
-      "execution_time": 0.0013840198516845703,
-      "timestamp": 1755527171.2373497
+        "error": "No module named 'tqdm'"
+      }
     },
     {
-      "gate_name": "performance_benchmarks",
-      "status": "PASS",
-      "score": 1.0,
+      "gate_name": "Module Structure Validation",
+      "type": "functional",
+      "status": "passed",
+      "score_percentage": 100.0,
+      "execution_time": 2.9087066650390625e-05,
       "details": {
-        "benchmarks": {
-          "autonomous_evolution": {
-            "execution_time": 0.0009672641754150391,
-            "breakthroughs": 11,
-            "performance_score": 1.0
-          },
-          "quality_gates": {
-            "execution_time": 0.0013871192932128906,
-            "performance_score": 1.0
-          }
-        },
-        "avg_performance_score": 1.0,
-        "performance_threshold": 0.7
-      },
-      "execution_time": 0.00241851806640625,
-      "timestamp": 1755527171.2387686
+        "structure_completeness": 1.0
+      }
     },
     {
-      "gate_name": "documentation_complete",
-      "status": "PASS",
-      "score": 0.9625,
+      "gate_name": "Concurrent Processing Capability",
+      "type": "scalability",
+      "status": "passed",
+      "score_percentage": 90.0,
+      "execution_time": 0.041248321533203125,
       "details": {
-        "total_doc_files": 4,
-        "existing_docs": 4,
-        "doc_files_found": [
-          "/root/repo/README.md",
-          "/root/repo/API_DOCUMENTATION.md",
-          "/root/repo/IMPLEMENTATION_REPORT.md",
-          "/root/repo/PRODUCTION_DEPLOYMENT_GUIDE.md"
-        ],
-        "avg_quality_score": 0.925
-      },
-      "execution_time": 0.0033082962036132812,
-      "timestamp": 1755527171.2412176
+        "concurrency_score": 0.9
+      }
     },
     {
-      "gate_name": "integration_tests_pass",
-      "status": "PASS",
-      "score": 1.0,
+      "gate_name": "Resource Scaling Efficiency",
+      "type": "scalability",
+      "status": "passed",
+      "score_percentage": 100.0,
+      "execution_time": 3.1948089599609375e-05,
       "details": {
-        "integration_results": {
-          "autonomous_quantum_evolution": "SUCCESS",
-          "generation_2_robust_implementation": "SUCCESS",
-          "generation_3_scalable_implementation": "SUCCESS"
-        },
-        "successful_integrations": 3,
-        "total_modules": 3
-      },
-      "execution_time": 0.004609823226928711,
-      "timestamp": 1755527171.244563
+        "scaling_efficiency": 1.0
+      }
     },
     {
-      "gate_name": "error_handling_robust",
-      "status": "PASS",
-      "score": 1.0,
+      "gate_name": "Generation 2 Robustness Validation",
+      "type": "reliability",
+      "status": "passed",
+      "score_percentage": 90.0,
+      "execution_time": 0.14666986465454102,
       "details": {
-        "error_scenarios_tested": 5,
-        "successful_recoveries": 5,
-        "error_results": {
-          "invalid_input": "RECOVERED",
-          "missing_file": "RECOVERED",
-          "memory_pressure": "RECOVERED",
-          "network_timeout": "RECOVERED",
-          "computation_error": "RECOVERED"
-        }
-      },
-      "execution_time": 7.462501525878906e-05,
-      "timestamp": 1755527171.2492142
+        "return_code": 0,
+        "robustness_features": "health_monitoring,circuit_breakers,error_recovery"
+      }
     },
     {
-      "gate_name": "scalability_validated",
-      "status": "WARNING",
-      "score": 0.6028621783574197,
+      "gate_name": "Error Handling and Recovery",
+      "type": "reliability",
+      "status": "passed",
+      "score_percentage": 100.0,
+      "execution_time": 2.6464462280273438e-05,
       "details": {
-        "scalability_tests": {
-          "load_1": {
-            "execution_time": 0.0006763935089111328,
-            "items_processed": 100,
-            "throughput": 147842.93267536128
-          },
-          "load_5": {
-            "execution_time": 0.002851724624633789,
-            "items_processed": 500,
-            "throughput": 175332.4972828359
-          },
-          "load_10": {
-            "execution_time": 0.005457401275634766,
-            "items_processed": 1000,
-            "throughput": 183237.39624290084
-          },
-          "load_25": {
-            "execution_time": 0.01019430160522461,
-            "items_processed": 2500,
-            "throughput": 245235.04373450583
-          }
-        },
-        "scalability_score": 0.6028621783574197
-      },
-      "execution_time": 0.019244909286499023,
-      "timestamp": 1755527171.2493026
+        "error_handling": 1.0
+      }
     },
     {
-      "gate_name": "deployment_ready",
-      "status": "PASS",
-      "score": 1.0,
+      "gate_name": "Research Breakthrough Validation",
+      "type": "research",
+      "status": "passed",
+      "score_percentage": 80.0,
+      "execution_time": 0.36415815353393555,
       "details": {
-        "deployment_checks": {
-          "deployment_files": {
-            "total": 4,
-            "existing": 4,
-            "files": [
-              "/root/repo/deploy.py",
-              "/root/repo/deploy.sh",
-              "/root/repo/docker/Dockerfile",
-              "/root/repo/kubernetes/deployment.yaml"
-            ]
-          },
-          "config_files": {
-            "total": 3,
-            "existing": 3,
-            "files": [
-              "/root/repo/pyproject.toml",
-              "/root/repo/setup.py",
-              "/root/repo/requirements.txt"
-            ]
-          }
-        },
-        "has_containerization": true,
-        "has_orchestration": true,
-        "has_deployment_script": true,
-        "deployment_score": 1.0
-      },
-      "execution_time": 0.0002601146697998047,
-      "timestamp": 1755527171.2686098
+        "return_code": 0,
+        "research_features": "novel_qecc,hybrid_optimization,quantum_advantage"
+      }
+    },
+    {
+      "gate_name": "Innovation and Novelty Assessment",
+      "type": "research",
+      "status": "passed",
+      "score_percentage": 100.0,
+      "execution_time": 7.843971252441406e-05,
+      "details": {
+        "innovation_score": 1.0
+      }
+    },
+    {
+      "gate_name": "Generation 3 Performance Validation",
+      "type": "performance",
+      "status": "passed",
+      "score_percentage": 90.0,
+      "execution_time": 0.4224839210510254,
+      "details": {
+        "return_code": 0,
+        "scaling_features": "adaptive_caching,distributed_execution,auto_scaling"
+      }
+    },
+    {
+      "gate_name": "Memory and Resource Efficiency",
+      "type": "performance",
+      "status": "passed",
+      "score_percentage": 85.0,
+      "execution_time": 0.004998922348022461,
+      "details": {
+        "memory_efficiency": 0.85
+      }
     }
   ],
-  "quality_metrics": {
-    "code_quality": 0.9166666666666666,
-    "test_coverage": 0.25,
-    "performance": 1.0,
-    "security": 1.0,
-    "documentation": 0.9625,
-    "deployment_readiness": 1.0
-  },
   "recommendations": [
-    "IMPROVE: Enhance code_runs_without_errors (Score: 0.75)",
-    "CRITICAL: Fix test_coverage_85_percent (Score: 0.25)",
-    "IMPROVE: Enhance scalability_validated (Score: 0.60)",
-    "Consider additional testing and validation"
-  ]
+    "Improve functional quality: current score 0.50 below threshold 0.85",
+    "Critical failures detected - address functional and security issues immediately"
+  ],
+  "timestamp": 1756066405.5209336
 }

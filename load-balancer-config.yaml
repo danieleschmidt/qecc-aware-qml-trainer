@@ -1,0 +1,45 @@
+# Advanced Load Balancer Configuration
+upstream qecc_qml_backend {
+    least_conn;
+    server qecc-qml-1:8000 max_fails=3 fail_timeout=30s;
+    server qecc-qml-2:8000 max_fails=3 fail_timeout=30s;
+    server qecc-qml-3:8000 max_fails=3 fail_timeout=30s;
+}
+
+server {
+    listen 80;
+    listen 443 ssl http2;
+    
+    server_name qecc-qml.terragonlabs.com;
+    
+    # SSL configuration
+    ssl_certificate /etc/ssl/certs/qecc-qml.crt;
+    ssl_certificate_key /etc/ssl/private/qecc-qml.key;
+    
+    # Rate limiting
+    limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+    
+    location / {
+        limit_req zone=api burst=20 nodelay;
+        
+        proxy_pass http://qecc_qml_backend;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # Circuit breaker
+        proxy_connect_timeout 5s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+        
+        # Health check
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+    }
+    
+    location /health {
+        access_log off;
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+    }
+}

@@ -1,0 +1,47 @@
+# Advanced Production Dockerfile for QECC-QML
+FROM python:3.11-slim AS base
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc g++ make cmake \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements
+COPY requirements.txt .
+COPY pyproject.toml .
+
+# Install Python dependencies with optimization
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Production stage
+FROM base AS production
+
+# Copy application code
+COPY qecc_qml/ ./qecc_qml/
+COPY examples/ ./examples/
+COPY *.py ./
+
+# Set environment variables
+ENV PYTHONPATH=/app
+ENV PYTHONOPTIMIZE=1
+ENV PYTHONUNBUFFERED=1
+
+# Create non-root user
+RUN useradd --create-home --shell /bin/bash qecc_user
+USER qecc_user
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import qecc_qml; print('OK')" || exit 1
+
+# Default command
+CMD ["python", "-m", "qecc_qml.cli"]
+
+LABEL maintainer="Terragon Labs" \
+      version="1.0.0" \
+      description="QECC-Aware Quantum Machine Learning Trainer"

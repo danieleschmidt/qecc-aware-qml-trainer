@@ -1,0 +1,91 @@
+{
+  "timestamp": 1756306894.1947987,
+  "validation_level": "comprehensive",
+  "summary": {
+    "total_tests": 6,
+    "passed_tests": 5,
+    "failed_tests": 1,
+    "success_rate": 0.8333333333333334,
+    "total_execution_time": 1.4000253677368164,
+    "avg_test_time": 0.2333123286565145
+  },
+  "quality_gates": {
+    "passed": false,
+    "success_rate_gate": false,
+    "execution_time_gate": true,
+    "error_rate_gate": false
+  },
+  "detailed_results": [
+    {
+      "test_name": "import_validation",
+      "success": false,
+      "execution_time": 0.06845498085021973,
+      "metrics": {},
+      "error_message": "No module named 'tqdm'"
+    },
+    {
+      "test_name": "basic_operations",
+      "success": true,
+      "execution_time": 0.6282944679260254,
+      "metrics": {
+        "recovery_attempted": 1,
+        "operations_completed": 2
+      },
+      "error_message": null
+    },
+    {
+      "test_name": "error_handling",
+      "success": true,
+      "execution_time": 0.7016382217407227,
+      "metrics": {
+        "errors_handled": 3,
+        "total_errors": 3,
+        "success_rate": 1.0
+      },
+      "error_message": null
+    },
+    {
+      "test_name": "research_framework",
+      "success": true,
+      "execution_time": 4.291534423828125e-06,
+      "metrics": {
+        "validation_score": 1.0,
+        "data_quality": 0.9,
+        "novelty_score": 0.85
+      },
+      "error_message": null
+    },
+    {
+      "test_name": "statistical_validation",
+      "success": true,
+      "execution_time": 5.4836273193359375e-06,
+      "metrics": {
+        "p_value": 0.001,
+        "improvement": 0.08000000000000007,
+        "effect_size": 5.656854249492381
+      },
+      "error_message": null
+    },
+    {
+      "test_name": "performance_benchmarks",
+      "success": true,
+      "execution_time": 0.0014765262603759766,
+      "metrics": {
+        "ops_per_second": 6772652.995317293,
+        "total_operations": 10000,
+        "efficiency_score": 1.0
+      },
+      "error_message": null
+    }
+  ],
+  "recommendations": [
+    "Success rate below 90% - review failed tests and improve robustness",
+    "Review error patterns and enhance error handling"
+  ],
+  "research_metrics": {
+    "research_success_rate": 1.0,
+    "avg_novelty_score": 0.85,
+    "avg_validation_score": 1.0,
+    "research_readiness": 0.9700000000000001
+  }
+}
